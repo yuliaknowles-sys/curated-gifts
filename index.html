@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Curated Gifts by Yulia Knowles: researched gifts and experiences, each with the reasoning, sourcing and logistics.">
+<title>Curated Gifts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Josefin+Sans:wght@400;600&display=swap">
+<style>
+/* Layout: companion to "Curated Travel Experiences" — framed hero (a gift cabinet with gold stars instead of a map), filters, The Collection grid, brief modal. Deliberately single light theme, matching the portfolio. */
+:root{
+  --ivory:#F7F4EE; --paper:#FCFAF6; --panel:#E4EBF0; --navy:#1E2B47; --navy-2:#4A5672;
+  --gold:#B28A4F; --gold-soft:#D9C49E; --line:#E3DBCC; --mute:#7A7F8C;
+  --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --caps:"Josefin Sans","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--ivory);color:var(--navy);font-family:var(--display);font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-weight:500;margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.caps{font-family:var(--caps);text-transform:uppercase;letter-spacing:.2em;font-size:.62rem;font-weight:400}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding-block:22px 0;gap:12px}
+.topbar a,.topbar span{font-family:var(--caps);text-transform:uppercase;letter-spacing:.18em;font-size:.6rem;color:var(--navy-2);text-decoration:none;padding-bottom:6px;border-bottom:1px solid var(--gold-soft)}
+.topbar a:hover{color:var(--navy)}
+.masthead{text-align:center;padding-block:4px 26px}
+.sun{width:64px;height:30px;stroke:var(--gold);fill:none;stroke-width:1}
+.masthead h1{font-size:clamp(1.9rem,4.6vw,2.8rem);letter-spacing:.16em;text-transform:uppercase;font-weight:400;margin-top:2px}
+.masthead .by{margin-top:4px;color:var(--navy-2)}
+.masthead .tag{margin-top:18px;font-style:italic;font-size:clamp(1.7rem,3.6vw,2.4rem)}
+
+/* cabinet hero */
+.frame{border:1px solid var(--gold-soft);padding:8px;position:relative}
+.frame::after{content:"";position:absolute;inset:-6px 8px auto 8px;height:1px;background:var(--gold-soft)}
+.cab{position:relative;background:var(--panel);overflow:hidden}
+.cab svg.shelves{display:block;width:100%;height:auto}
+.obj{fill:none;stroke:var(--navy);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.88;transition:opacity .25s}
+.shelf{stroke:var(--navy-2);stroke-width:1;opacity:.45}
+.lbl{font-family:var(--caps);font-size:12px;letter-spacing:.18em;fill:var(--navy);text-transform:uppercase}
+.star{cursor:pointer}
+.star path{fill:var(--gold);stroke:#8E6B37;stroke-width:.6;transition:transform .2s;transform-origin:center;transform-box:fill-box}
+.star circle{fill:var(--gold);opacity:.18}
+.star:hover path,.star.on path{transform:scale(1.3)}
+.item.feat .lbl{fill:var(--gold);font-weight:600}
+.item.dim .obj,.item.dim .lbl{opacity:.18}
+.item.dim .star{opacity:.25;pointer-events:none}
+.hint{position:absolute;left:18px;top:14px;color:var(--navy-2)}
+.peek{position:absolute;right:18px;bottom:18px;width:min(430px,calc(100% - 36px));background:var(--paper);border:1px solid var(--gold-soft);box-shadow:0 10px 30px rgba(30,43,71,.14);display:grid;grid-template-columns:130px 1fr;gap:16px;padding:10px;animation:fade .25s ease}
+.peek .pl{aspect-ratio:1;max-width:100%}
+.peek .eyebrow{color:var(--navy-2)}
+.peek h3{font-size:1.35rem;line-height:1.15;margin:4px 0 6px}
+.peek .mood{font-style:italic;color:var(--mute);font-size:.95rem;padding-top:6px;border-top:1px solid var(--gold-soft);display:inline-block}
+.peek .go{margin-top:8px;display:inline-block;border-bottom:1px solid var(--gold);padding-bottom:3px}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.motto{text-align:center;font-size:clamp(1.2rem,2.6vw,1.6rem);letter-spacing:.06em;padding-block:42px 8px}
+.rule{width:36px;height:1px;background:var(--gold);margin:12px auto 26px}
+.filters{display:flex;flex-direction:column;gap:10px;align-items:center}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{font-family:var(--caps);text-transform:uppercase;letter-spacing:.18em;font-size:.62rem;padding:12px 16px 10px;border:1px solid var(--line);background:var(--paper);transition:border-color .2s}
+.chip:hover{border-color:var(--gold-soft)}
+.chip[aria-pressed="true"]{background:var(--navy);color:var(--ivory);border-color:var(--navy)}
+.count{text-align:center;font-style:italic;color:var(--mute);font-size:.95rem;margin-top:14px}
+
+.collection h2{text-align:center;font-size:clamp(1.6rem,3.4vw,2.2rem);letter-spacing:.2em;text-transform:uppercase;font-weight:400;padding-block:48px 28px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-bottom:40px}
+.card{background:var(--paper);border:1px solid var(--line);padding:8px;display:flex;flex-direction:column;animation:fade .3s ease;cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s}
+.card:hover,.card:focus-visible{border-color:var(--gold-soft);box-shadow:0 12px 28px rgba(30,43,71,.10);transform:translateY(-3px)}
+.card:hover .brief{color:var(--gold)}
+.pl{aspect-ratio:3/2;max-width:100%;display:grid;place-items:center;position:relative;overflow:hidden}
+.pl svg{width:58%;height:auto;fill:none;stroke:var(--navy);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.pl .ph{position:absolute;right:8px;bottom:6px;font-family:var(--caps);font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--navy-2);opacity:.7}
+.cbody{padding:18px 16px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.eyebrow{font-family:var(--caps);text-transform:uppercase;letter-spacing:.2em;font-size:.6rem;color:var(--navy-2)}
+.card h3{font-size:1.55rem;line-height:1.15}
+.card p{color:var(--navy-2);font-size:1.02rem}
+.brief{margin-top:auto;align-self:flex-start;font-family:var(--caps);text-transform:uppercase;letter-spacing:.2em;font-size:.6rem;padding:6px 0;border-bottom:1px solid var(--gold)}
+.brief:hover{color:var(--gold)}
+.empty{grid-column:1/-1;text-align:center;font-style:italic;color:var(--mute);padding:30px}
+
+/* tints for plates */
+.t-sky{background:linear-gradient(160deg,#DCE6EE,#F1F4F6)}
+.t-sage{background:linear-gradient(160deg,#DDE3D3,#F2F3EC)}
+.t-blush{background:linear-gradient(160deg,#EEDDD6,#F7EFEA)}
+.t-sand{background:linear-gradient(160deg,#EADFCB,#F6F1E7)}
+.t-ink{background:linear-gradient(160deg,#C9D0DC,#ECEEF2)}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(30,43,71,.45);display:grid;place-items:center;padding:20px max(16px,env(safe-area-inset-left,0px));z-index:40;animation:fade .2s ease}
+.modal{background:var(--ivory);border:1px solid var(--gold-soft);max-width:700px;width:100%;max-height:calc(100% - 20px);overflow:auto;position:relative}
+.mhero{position:relative;aspect-ratio:16/7;display:grid;place-items:center}
+.mhero svg{width:30%;fill:none;stroke:var(--navy);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.mhero .shade{position:absolute;inset:auto 0 0 0;padding:18px 28px 16px;background:linear-gradient(transparent,rgba(30,43,71,.85));color:#FCFAF6}
+.mhero .shade .eyebrow{color:#E9DFC9}
+.mhero h3{font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.1;margin-top:4px;color:#FCFAF6}
+.x{position:absolute;top:14px;right:14px;width:34px;height:34px;border:1px solid rgba(30,43,71,.35);background:var(--paper);z-index:2;font-size:1rem}
+.mbody{padding:24px 28px 28px}
+.lede{font-size:1.1rem}
+.rows{margin-top:16px}
+.rows div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.rows div:last-child{border-bottom:1px solid var(--line)}
+.rows dt{font-family:var(--caps);text-transform:uppercase;letter-spacing:.2em;font-size:.58rem;color:var(--navy-2);padding-top:5px}
+.rows dd{margin:0}
+.insider{margin-top:20px;background:var(--paper);border-left:2px solid var(--gold);padding:14px 18px}
+.insider .eyebrow{color:var(--gold)}
+.insider p{font-style:italic;margin-top:4px}
+.source{margin-top:16px;font-size:.9rem;color:var(--mute)}
+.source a{color:var(--navy);text-underline-offset:3px;text-decoration-color:var(--gold)}
+
+footer{border-top:1px solid var(--gold-soft);margin-top:20px;padding-block:30px 44px;text-align:center}
+.steps{font-family:var(--caps);text-transform:uppercase;letter-spacing:.22em;font-size:.6rem;color:var(--navy-2);display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px}
+.steps i{color:var(--gold);font-style:normal}
+.fine{max-width:62ch;margin:14px auto 0;font-style:italic;color:var(--mute);font-size:.95rem}
+
+.feature{margin-top:44px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:var(--paper);border:1px solid var(--gold-soft)}
+.feature .pl{aspect-ratio:auto;min-height:320px}
+.feature .pl svg{width:48%}
+.fbody{padding:34px 36px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.fbody h2{font-size:clamp(1.7rem,3.4vw,2.3rem);line-height:1.1}
+.fbody p{color:var(--navy-2)}
+.fbody .facts{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--caps);text-transform:uppercase;letter-spacing:.16em;font-size:.58rem;color:var(--navy-2);padding-top:10px;border-top:1px solid var(--line)}
+.badge{align-self:flex-start;font-family:var(--caps);text-transform:uppercase;letter-spacing:.2em;font-size:.56rem;color:var(--gold);border:1px solid var(--gold-soft);padding:6px 10px 4px}
+.card.feat{border-color:var(--gold-soft)}
+.t-buly{background:linear-gradient(160deg,#E9DCC8,#F5EEE2)}
+.peek{position:static;width:auto;max-width:640px;margin:16px auto 0;box-shadow:none}
+@media (max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.feature{grid-template-columns:1fr}.feature .pl{min-height:200px}.fbody{padding:24px 20px}}
+@media (max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .peek{position:static;width:auto;margin:0;border-width:1px 0 0;box-shadow:none;grid-template-columns:96px 1fr}
+  .hint{display:none}
+  .lbl{display:none}
+  .rows div{grid-template-columns:1fr;gap:2px}
+  .mbody{padding:20px}
+  .topbar span{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="topbar">
+    <span>Portfolio project</span>
+    <a href="https://yuliaknowles.wixsite.com/yulia-knowles" target="_blank" rel="noopener noreferrer">← Back to Yulia's website</a>
+  </div>
+  <header class="masthead">
+    <svg class="sun" viewBox="0 0 64 30" aria-hidden="true"><path d="M12 28a20 20 0 0 1 40 0"/><path d="M32 2v6M18 6l3 5M46 6l-3 5M8 14l5 3M56 14l-5 3M4 24h6M54 24h6"/><path d="M2 28h60"/></svg>
+    <h1>Curated Gifts</h1>
+    <p class="by caps">By Yulia Knowles</p>
+    <p class="tag">Gifts worth remembering.</p>
+  </header>
+
+  <div class="frame">
+    <div class="cab" id="cab">
+      <span class="hint caps">Choose a star to discover</span>
+      <svg class="shelves" id="shelves" viewBox="0 0 1200 640" role="group" aria-label="Gift cabinet"></svg>
+      </div>
+  </div>
+  <div class="peek" id="peek"></div>
+
+  <p class="motto">Researched sources. Personal reasons. Every detail handled.</p>
+  <div class="rule"></div>
+  <div class="filters">
+    <div class="row" id="forRow" role="group" aria-label="Who it's for"></div>
+    <div class="row" id="occRow" role="group" aria-label="Occasion"></div>
+  </div>
+  <p class="count" id="count"></p>
+
+  <section class="collection">
+    <h2>The Collection</h2>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="steps"><span>Understand</span><i>·</i><span>Research</span><i>·</i><span>Curate</span><i>·</i><span>Coordinate</span><i>·</i><span>Confirm</span></div>
+    <p class="fine">Every house and service was checked against its own page or a recent report on October 28, 2026. Prices are indicative and change; each would be confirmed in writing before ordering. Illustrations stand in for product photography.</p>
+  </div>
+</footer>
+
+<div id="modal"></div>
+
+<script>
+const M = {
+  lotus:`<path d="M100 104c-14-14-14-34 0-50c14 16 14 36 0 50z"/><path d="M100 104c-22-2-36-16-40-36c20 2 34 14 40 36zM100 104c22-2 36-16 40-36c-20 2-34 14-40 36z"/><path d="M100 104c-30 6-50-4-60-20M100 104c30 6 50-4 60-20"/><path d="M40 116h120M64 124h72"/><circle cx="100" cy="28" r="8"/>`,
+  car:`<path d="M28 96h144c6 0 8-4 8-8v-6c0-6-6-10-14-12l-24-6-22-18c-6-4-12-6-20-6H74c-10 0-18 6-24 12L36 70c-8 2-12 6-12 12v8c0 4 2 6 4 6z"/><circle cx="58" cy="96" r="14"/><circle cx="146" cy="96" r="14"/><circle cx="58" cy="96" r="5"/><circle cx="146" cy="96" r="5"/><path d="M60 64l12-14h26v14zM104 64v-14h12c4 0 8 2 10 4l10 10z"/><path d="M20 120h160"/>`,
+  bookopen:`<path d="M100 44c-18-10-44-10-62-4v76c18-6 44-6 62 4c18-10 44-10 62-4V40c-18-6-44-6-62 4z"/><path d="M100 44v76"/><rect x="50" y="54" width="36" height="26"/><path d="M50 90h36M50 98h30M114 56h36M114 64h30M114 72h36M114 80h24"/>`,
+  globe:`<circle cx="100" cy="58" r="40"/><ellipse cx="100" cy="58" rx="16" ry="40"/><path d="M60 58h80M66 38h68M66 78h68"/><path d="M52 40a50 50 0 0 0 82 62"/><path d="M100 108v14M78 124h44"/>`,
+  bench:`<path d="M30 92h140"/><path d="M36 50h128M36 64h128"/><path d="M44 50v42M156 50v42M44 92v30M156 92v30M40 104h120"/><rect x="88" y="54" width="24" height="7"/>`,
+  perfume:`<rect x="68" y="62" width="64" height="58" rx="6"/><rect x="90" y="46" width="20" height="16"/><path d="M86 46h28l-5-22h-18z"/><rect x="82" y="80" width="36" height="22"/><path d="M88 91h24"/>`,
+  book:`<rect x="56" y="34" width="88" height="80" rx="2"/><path d="M66 34v80"/><path d="M80 56h50M80 64h36"/><rect x="88" y="80" width="28" height="18" rx="1"/><path d="M56 114c12 6 76 6 88 0"/>`,
+  chart:`<rect x="36" y="22" width="128" height="96"/><rect x="42" y="28" width="116" height="84"/><path d="M42 66C58 56 70 78 90 64C110 50 122 70 158 54"/><path d="M42 82C64 72 74 92 98 78"/><circle cx="134" cy="94" r="9"/><path d="M134 82v24M122 94h24"/>`,
+  chess:`<path d="M74 122h52M80 122l4-14h32l4 14"/><path d="M88 108c-5-20 3-32-1-46c11-12 29-15 37-4c4 6 0 11-7 11c-6 0-6 6-2 10c8 8 7 19 5 29"/><circle cx="108" cy="66" r="1.6"/>`,
+  letter:`<rect x="48" y="42" width="104" height="70"/><path d="M48 42l52 40 52-40"/><circle cx="100" cy="86" r="9"/><path d="M60 26h80v16M60 26v16"/>`,
+  truffle:`<path d="M66 100c-8-22 6-44 30-46c24-2 40 16 36 36c-4 20-22 28-38 26c-14-2-24-6-28-16z"/><path d="M84 74l3 2M104 70l2 3M116 86l2 2M92 92l3 1M110 102l2-2M78 92l1 3"/><path d="M146 54l18-18M140 60l6-6 8 8-6 6z"/>`,
+  rose:`<path d="M100 124V66"/><path d="M100 98C86 94 80 86 78 78C90 80 98 88 100 98Z"/><path d="M100 86C114 82 120 74 122 66C110 68 102 76 100 86Z"/><circle cx="100" cy="46" r="20"/><path d="M100 46m-6 0a6 6 0 1 1 6 6a11 11 0 1 1-11-11"/>`,
+  pot:`<path d="M72 94h56l-7 30h-42z"/><path d="M70 94h60"/><path d="M100 94V60M90 94V72M112 94V68"/><circle cx="100" cy="52" r="10"/><circle cx="88" cy="66" r="7"/><circle cx="114" cy="62" r="8"/><path d="M96 80c-8-2-12-8-12-12M106 78c8-2 10-8 10-12"/>`,
+  knife:`<path d="M74 70L162 64Q174 68 170 78L74 82Z"/><path d="M30 70h44v12H30z"/><path d="M88 74h60"/><path d="M40 98h120"/><path d="M54 98v10h92v-10"/>`,
+  brush:`<ellipse cx="72" cy="64" rx="40" ry="28"/><ellipse cx="72" cy="64" rx="31" ry="20"/><path d="M110 70l58 18q8 4 4 10l-2 2q-4 4-12 0l-56-22"/><path d="M58 56h.1M68 52h.1M78 52h.1M88 56h.1M54 66h.1M64 62h.1M74 62h.1M84 64h.1M62 72h.1M72 72h.1M82 72h.1"/><path d="M40 116c20-6 60-6 100 0"/><path d="M128 30h40q6 0 6 6t-6 6h-40q-6 0-6-6t6-6z"/><path d="M132 36h32"/>`,
+  bowl:`<ellipse cx="100" cy="62" rx="54" ry="10"/><path d="M46 62C48 96 72 112 100 112C128 112 152 96 154 62"/><path d="M86 112l-4 8h36l-4-8"/><path d="M78 56c12-12 32-12 44 0"/>`
+};
+
+const FOR = ["Founder","Parents","Significant other","Business partner","Host"];
+const OCC = ["Birthday","Thank-you","Hostess","Milestone","Holidays"];
+
+const G = [
+{ id:"passion", m:"car", tint:"t-ink", label:"The Passion Day", maker:"Audi driving experience · Spa-Francorchamps", title:"The Passion Day: an Audi R8 on a Formula 1 Circuit",
+  short:"A day built around one passion, here cars: track training in an R8 at Spa, with every detail around it handled.",
+  mood:"Experience · Signature", for:["Founder","Significant other","Business partner","Parents"], occ:["Birthday","Milestone","Thank-you"],
+  lede:"The Passion Day is a day built around the recipient's passion: cars, photography, food or the mountains. This version is for someone who loves cars. Audi's race track training runs on Formula 1 circuits, including Spa-Francorchamps and the Red Bull Ring, in the R8 Coupé V10 performance quattro with Audi instructors. The gift is the driving and everything around it.",
+  rows:[["The day","One training day on track with an overnight stay, from €1,850 per person (Audi, incl. VAT). Cars include the R8, RS 3 and RS e-tron GT, depending on the circuit."],["Sample schedule","Arrive the evening before. 7:30 breakfast, briefing with the instructors, morning sessions, lunch, afternoon laps in the R8, debrief, dinner nearby. Final timings come from Audi."],["Transfer","Private car from Brussels airport to Spa and back, about 90 minutes each way. Luggage sent ahead to the hotel."],["Who's there","The recipient drives. A companion can join for the day; whether guests may ride along is confirmed with Audi in advance."],["Dining","Breakfast and lunch planned around the sessions; a quiet dinner booked near the circuit, with dietary notes sent ahead."],["Backup plan","If the date is full or cancelled: the next Spa date, or the Red Bull Ring in Austria. Wet weather is part of the training, not a reason to cancel."],["Access","Places, instructors and any special access are confirmed separately and in writing before anything is promised to the client."]],
+  note:"Give it on the day as a printed itinerary in an envelope, with the circuit map on the back. The anticipation is half the gift.",
+  src:["Audi driving experience, Race Track Experience","https://www.audi.de/de/audi-driving-experience-en/sportscar-experience/race-track-experience/"] },
+{ id:"bench", m:"bench", tint:"t-sage", maker:"Central Park Conservancy · New York", title:"A Bench in Central Park",
+  short:"Endow a bench with a plaque of up to four lines. A quiet gift that stays in the city they love.",
+  mood:"Lasting · Philanthropic", for:["Parents","Significant other"], occ:["Milestone","Birthday"],
+  lede:"The Conservancy's Adopt-A-Bench programme endows a park bench with an engraved plaque. More than 7,000 of the park's benches already carry one, so availability is confirmed bench by bench.",
+  rows:[["Why it works","For someone who walks the park, or to mark an anniversary or a person they miss."],["Personal touch","Four lines, 30 characters each, in the font you choose. An engraver sends a proof."],["Indicative price","Endowment on inquiry; fully tax deductible."],["Lead time","Reply within 4 business days; up to 9 weeks to install after the proof is approved."]],
+  note:"Check the Conservancy's bench map for a spot with meaning: near the Reservoir, a favourite path. Give a framed photo of the plaque proof on the day.",
+  src:["Central Park Conservancy, Adopt-A-Bench","https://www.centralparknyc.org/giving/adopt-a-bench"] },
+{ id:"founder", m:"bookopen", tint:"t-sand", label:"The Founder's Story", maker:"Commissioned · writer and bindery", title:"The Founder's Story",
+  short:"A book of the company's first years, gathered from the team's photographs and memories, bound by hand.",
+  mood:"Legacy · Milestone", for:["Founder"], occ:["Milestone","Thank-you","Holidays"],
+  lede:"For a founder at a milestone: an anniversary, a funding round, an exit. I quietly gather photographs and short memories from early employees, investors and family, then work with a professional interviewer and designer to shape them into a book of the company's first years. One copy is hand-bound for the founder; a few more go to the people in it.",
+  rows:[["What it holds","Early photos, first office, first hires, the night it almost failed, the day it worked. Short pieces in each person's own words."],["How it's made","Contributions collected privately over 6–10 weeks. A professional interviewer fills the gaps; services like StoryTerrace offer this from $1,200 to $3,250+."],["The binding","Printed, then hand-bound in leather or cloth with a slipcase by a fine bindery, such as Harcourt Bindery in Boston."],["Discretion","Contributors are asked to keep it secret. Nothing confidential about the business goes into the book; legal reviews the text if needed."],["Timeline","Allow three months from first email to finished book. Start well before the date."]],
+  note:"Ask the earliest employee to write the first page. The founder will read that one twice.",
+  src:["StoryTerrace, How it works","https://storyterrace.com/?p=15881"] },
+{ id:"buly", label:"The Parisian Dressing Table", m:"brush", tint:"t-buly", maker:"Officine Universelle Buly · Paris", title:"The Parisian Dressing Table",
+  short:"A curated trio: an engraved Buly brush, a hair clip chosen for her style, and a note on why it's hers.",
+  mood:"Personal · Curated set", for:["Significant other","Parents"], occ:["Birthday","Holidays"],
+  lede:"This is my own composition, not a boxed set from the house. It starts with Officine Universelle Buly, the Paris apothecary founded in 1803, whose Les Gravables collection lists around 80 pieces that can be personalised. Around the engraved brush I add two things only I can choose: a clip that suits how she wears her hair, and a note.",
+  rows:[["What's inside","Buly Classic Grand Hairbrush, engraved. A hair clip chosen for her style (tortoiseshell, gold, or a simple bow, sourced separately). A handwritten card."],["Why it works","Three small things that show attention: her name, her style, and the reason in words. Used every morning, at her own dressing table."],["The note","Two or three lines linking the gift to her: a memory, a city, the way she wears her hair. Never generic."],["Indicative price","Brush $98; with an engravable Baume des Muses, $285. Clip priced separately."],["Lead time","Confirm with Buly; personalisation is chosen at checkout. Free US shipping above a threshold ($150–$220 per the site)."]],
+  note:"Choose the clip by looking, not guessing: notice what she already wears before buying. Spell the engraved name the way she signs it, and keep the wrapping simple so the three pieces read as one gift.",
+  src:["Buly 1803, Les Gravables","https://buly1803.com/en-us/collections/les-gravables"] },
+{ id:"dispenza", m:"lotus", tint:"t-sky", label:"The Inward Week", maker:"Dr Joe Dispenza · Week Long Retreat", title:"The Inward Week with Dr Joe Dispenza",
+  short:"Seven days of meditation and lectures with Dr Joe Dispenza, for someone already drawn to his work. I handle everything around it.",
+  mood:"Experience · Personal", for:["Significant other","Founder","Parents"], occ:["Milestone","Birthday"],
+  lede:"Dr Joe Dispenza's Week Long Retreat is a seven-day in-person programme of meditation, lectures and community, built on his Progressive Retreat. Places are limited and sell out quickly, and attendees must complete required coursework first. The gift is a secured place, and a week where the recipient has nothing to organise.",
+  rows:[["Upcoming dates","Riviera Maya, Mexico, Dec 7–13, 2026 and Apr 12–18, 2027; Aurora, Colorado, Mar 24–30, 2027; more listed on the official site."],["Eligibility","Required coursework must be completed before registering. I check what they've already done and plan the timeline back from the retreat date."],["Registration","An account is created in advance and I'm ready the moment registration opens, with a second date in reserve."],["Stay & transfer","Private airport transfer and a quiet room close to the venue, booked once the place is confirmed. Arrival a day early to settle in."],["Who's there","Usually the recipient alone, or with a partner if both want to go. I keep their calendar clear for the full week."],["Backup plan","If the date sells out: the next Week Long Retreat, or the shorter Progressive Retreat as a first step."],["A note on fit","Only for someone who has mentioned his work themselves. It is a personal choice, not a surprise for a sceptic."]],
+  note:"Give it as a letter, not a ticket: the dates, the place, and a line saying their week is already taken care of.",
+  src:["Dr Joe Dispenza, Week Long Retreats","https://drjoedispenza.com/advanced-retreats"] },
+{ id:"truffle", m:"truffle", tint:"t-sand", maker:"Urbani · from Piemonte", title:"White Truffles, in Season",
+  short:"Fresh Alba truffles, flown in during their short autumn season, for a host who loves to cook.",
+  mood:"Seasonal · Hostess", for:["Host","Business partner"], occ:["Hostess","Holidays","Thank-you"],
+  lede:"White truffles are harvested from roughly September to December in northern and central Italy. Urbani ships them refrigerated, with next-business-day delivery for orders placed early in the week.",
+  rows:[["Why it works","A host's gift that becomes a dinner, and it's only possible a few weeks a year."],["Personal touch","A card suggesting the simplest use: fresh tagliolini, butter, shaved at the table."],["Indicative price","About $1,389 for 4 oz of medium truffles (retail listing)."],["Lead time","Order Mon–Thu before 2 PM ET; US delivery only."]],
+  note:"Truffles fade within days. Confirm someone is home on delivery day, never send before a weekend.",
+  src:["Urbani via WebstaurantStore","https://www.webstaurantstore.com/urbani-fresh-white-alba-medium-truffles-4-oz/877URBEM4.html"] },
+{ id:"book", m:"book", tint:"t-sand", maker:"Bauman Rare Books · New York", title:"A First Edition for Their Shelves",
+  short:"A first edition chosen for the reader, gift-wrapped and shipped anywhere in the world.",
+  mood:"Collector · Lasting", for:["Business partner","Parents"], occ:["Birthday","Thank-you"],
+  lede:"Bauman deals in rare and first editions and will gift-wrap and ship worldwide. Each book arrives with a write-up of its bibliographic details and history.",
+  rows:[["Why it works","A collector gets a real addition; a reader gets the first printing of a book that mattered to them."],["Personal touch","Choose a title tied to the relationship. A note tucked inside the cover."],["Indicative price","Varies widely by title; gift certificates in any amount."],["Lead time","Usually days to ship once a title is chosen."]],
+  note:"Check the recipient's shelves first. A duplicate first edition is the one mistake you can't wrap your way out of.",
+  src:["Bauman Rare Books, Gift Services","https://baumanrarebooks.com/customer-service/gift-services.aspx"] },
+{ id:"chess", m:"chess", tint:"t-sand", maker:"Jaques of London · since 1795", title:"Staunton Chess, From the Firm That Made It",
+  short:"Hand-carved pieces in the pattern Jaques introduced in 1849, in a mahogany or leather casket.",
+  mood:"Heirloom · Family", for:["Parents"], occ:["Holidays","Milestone"],
+  lede:"The Staunton pattern was introduced in 1849 and popularised by Jaques, which has made games since 1795. Its luxury sets are carved in boxwood and other woods and come boxed.",
+  rows:[["Why it works","A family heirloom that gets used: a set for the house where everyone gathers."],["Personal touch","Ask about engraving the box; include the date and the family's initials."],["Indicative price","£1,849–£5,495 for the luxury sets listed."],["Lead time","Ships from the UK; allow for international delivery."]],
+  note:"Pair it with an afternoon: the gift lands better if someone sits down to play the first game that day.",
+  src:["Jaques of London, Staunton sets","https://jaqueslondon.co.uk/products/staunton-set-wooden"] },
+{ id:"scent", label:"Bespoke Perfume", m:"perfume", tint:"t-blush", maker:"Floris · 89 Jermyn Street, London", title:"A Scent Composed With a Perfumer",
+  short:"Three private sessions in the perfumery behind the Jermyn Street shop, ending with two fragrances of their own.",
+  mood:"Experience · Personal", for:["Significant other"], occ:["Birthday","Milestone"],
+  lede:"Floris has made perfume on Jermyn Street since the 18th century. In its bespoke design experience, the client works with a perfumer over three sessions to create two fragrances, which are then archived in the Floris ledger for reordering.",
+  rows:[["Why it works","For someone who loves scent and visits London. It's an experience that leaves something behind."],["Personal touch","Six 100ml bottles, engraved with their initials; the formulas kept on file."],["Indicative price","£6,000."],["Lead time","Three sessions of about two hours; valid for 12 months from purchase."]],
+  note:"Never for a recipient with fragrance sensitivities. Present it as a dated invitation timed to their next London trip.",
+  src:["Floris London, Bespoke Perfume Design","https://florislondon.com/pages/bespoke-perfume-design"] }
+];
+
+let fFor="All", fOcc="All", active=G[0].id;
+const $=id=>document.getElementById(id);
+const svg=k=>`<svg viewBox="0 0 200 140" aria-hidden="true">${M[k]}</svg>`;
+const match=g=>(fFor==="All"||g.for.includes(fFor))&&(fOcc==="All"||g.occ.includes(fOcc));
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+/* cabinet: 4 columns × 3 shelves */
+function drawCabinet(){
+  let out="";
+  for(let r=0;r<3;r++){ const y=r*210+196; out+=`<line class="shelf" x1="20" y1="${y}" x2="1180" y2="${y}"/><line class="shelf" x1="20" y1="${y+6}" x2="1180" y2="${y+6}"/>`; }
+  const shelf=G, n=shelf.length, cols=n<=9?3:4, cw=1200/cols;
+  shelf.forEach((g,i)=>{
+    const r=Math.floor(i/cols), inRow=Math.min(cols,n-r*cols), c=i%cols, x=cw*c+cw/2-95+(cols-inRow)*cw/2, y=r*210+40;
+    out+=`<g class="item${g.featured?" feat":""}" data-id="${g.id}">
+      <rect class="hit" x="${x-10}" y="${y-10}" width="210" height="170" fill="transparent" style="cursor:pointer;pointer-events:all"/>
+      <g class="obj" transform="translate(${x},${y}) scale(.95)">${M[g.m]}</g>
+      <text class="lbl" x="${x+95}" y="${y+150}" text-anchor="middle">${esc(g.label||g.maker.split(" · ")[0])}</text>
+      <g class="star" tabindex="0" role="button" aria-label="${esc(g.title)}" data-id="${g.id}" transform="translate(${x+182},${y+18})${g.featured?" scale(1.35)":""}">
+        <circle r="16"/><path d="M0-12 2.6-2.6 12 0 2.6 2.6 0 12-2.6 2.6-12 0-2.6-2.6Z"/></g>
+    </g>`;
+  });
+  $("shelves").innerHTML=out;
+  $("shelves").querySelectorAll(".star").forEach(s=>{
+    const id=s.dataset.id;
+    s.addEventListener("mouseenter",()=>setActive(id));
+    s.addEventListener("focus",()=>setActive(id));
+    s.addEventListener("click",()=>{setActive(id);open(id);});
+    s.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open(id);}});
+  });
+  $("shelves").querySelectorAll(".item").forEach(it=>{
+    const id=it.dataset.id;
+    it.querySelectorAll(".hit,.obj,.lbl").forEach(el=>{
+      el.style.cursor="pointer";
+      el.addEventListener("mouseenter",()=>setActive(id));
+      el.addEventListener("click",()=>open(id));
+    });
+  });
+}
+function setActive(id){
+  active=id; const g=G.find(x=>x.id===id);
+  document.querySelectorAll(".star").forEach(s=>s.classList.toggle("on",s.dataset.id===id));
+  $("peek").innerHTML=`<div class="pl ${g.tint}">${svg(g.m)}</div>
+    <div><span class="eyebrow">${esc(g.maker)}</span><h3>${esc(g.title)}</h3><span class="mood">${esc(g.mood)}</span><br>
+    <button class="go caps" id="peekGo">Discover ↗</button></div>`;
+  $("peekGo").onclick=()=>open(id);
+  $("peek").querySelector(".pl").style.cursor="pointer";
+  $("peek").querySelector(".pl").onclick=()=>open(id);
+}
+
+function chips(el,list,get,set){
+  el.innerHTML=["All",...list].map(v=>`<button class="chip" aria-pressed="${get()===v}" data-v="${esc(v)}">${v==="All"?(el.id==="forRow"?"For anyone":"Any occasion"):esc(v)}</button>`).join("");
+  el.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{set(b.dataset.v);render();});
+}
+function render(){
+  chips($("forRow"),FOR,()=>fFor,v=>fFor=v);
+  chips($("occRow"),OCC,()=>fOcc,v=>fOcc=v);
+  const list=G.filter(match);
+  $("count").textContent=list.length+(list.length===1?" gift":" gifts");
+  document.querySelectorAll(".item").forEach(it=>it.classList.toggle("dim",!match(G.find(g=>g.id===it.dataset.id))));
+  if(list.length && !list.some(g=>g.id===active)) setActive(list[0].id);
+  $("grid").innerHTML=list.length?list.map(g=>`
+    <article class="card" data-id="${g.id}" tabindex="0" role="button" aria-label="Open the brief: ${esc(g.title)}">
+      <div class="pl ${g.tint}">${svg(g.m)}<span class="ph">Illustration</span></div>
+      <div class="cbody">
+        ${g.featured?'<span class="badge">Featured house</span>':""}
+        <span class="eyebrow">${esc(g.maker)}</span>
+        <h3>${esc(g.title)}</h3>
+        <p>${esc(g.short)}</p>
+        <span class="brief">View the brief ↗</span>
+      </div>
+    </article>`).join(""):`<p class="empty">No gifts match both filters. Try another occasion.</p>`;
+  $("grid").querySelectorAll(".card").forEach(c=>{
+    c.onclick=()=>open(c.dataset.id);
+    c.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open(c.dataset.id);}};
+  });
+}
+
+let lastFocus=null;
+function open(id){
+  const g=G.find(x=>x.id===id); lastFocus=document.activeElement;
+  $("modal").innerHTML=`<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <button class="x" id="mx" aria-label="Close">×</button>
+    <div class="mhero ${g.tint}">${svg(g.m)}<div class="shade"><span class="eyebrow">${esc(g.maker)}</span><h3 id="mt">${esc(g.title)}</h3></div></div>
+    <div class="mbody">
+      <p class="lede">${esc(g.lede)}</p>
+      <dl class="rows">${g.rows.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+      <div class="insider"><span class="eyebrow">Insider note</span><p>${esc(g.note)}</p></div>
+      <p class="source">Source: <a href="${g.src[1]}" target="_blank" rel="noopener noreferrer">${esc(g.src[0])} ↗</a> · checked Oct 28, 2026</p>
+    </div></div></div>`;
+  const close=()=>{$("modal").innerHTML="";document.removeEventListener("keydown",esc_);lastFocus&&lastFocus.focus&&lastFocus.focus();};
+  const esc_=e=>{if(e.key==="Escape")close();};
+  document.addEventListener("keydown",esc_);
+  $("mx").onclick=close; $("mx").focus();
+  $("scrim").onclick=e=>{if(e.target.id==="scrim")close();};
+}
+
+drawCabinet(); setActive(active); render();
+</script>
+
+</body>
+</html>
